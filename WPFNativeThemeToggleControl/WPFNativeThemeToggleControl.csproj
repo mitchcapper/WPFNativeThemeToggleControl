@@ -4,7 +4,7 @@
     <TargetFramework>net10.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <NoWarn>$(NoWarn);WPF0001</NoWarn>
-		<Version>1.0.21</Version>
+		<Version>1.0.22</Version>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageOutputPath>../Publish</PackageOutputPath>

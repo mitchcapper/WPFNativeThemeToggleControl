@@ -4,12 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestApp"
+		xmlns:sw="clr-namespace:System.Windows;assembly=PresentationFramework"
 		xmlns:ThemeToggle="clr-namespace:WPFNativeThemeToggleControl;assembly=WPFNativeThemeToggleControl"
         mc:Ignorable="d"
         Title="MainWindow" Height="250" Width="400">
     <Grid>
 		<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <ThemeToggle:ThemeToggleControl x:Name="ThemeToggle"
+			<ThemeToggle:ThemeToggleControl x:Name="ThemeToggle" CurrentTheme="{x:Static sw:ThemeMode.Dark}"
                                     ThemeChanged="ThemeToggle_ThemeChanged"
                                     HorizontalAlignment="Right"
                                     Margin="5" />

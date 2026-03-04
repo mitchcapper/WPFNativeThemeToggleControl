@@ -35,6 +35,34 @@ Use the control:
     ThemeChanged="ThemeToggle_ThemeChanged" />
 ```
 
+When not using data binding, there are two ways to set the initial theme in XAML.
+
+### Option 1: `CurrentTheme` with `ThemeMode` (strongly typed)
+
+Add the `sw` namespace to your XAML root:
+
+```xml
+xmlns:sw="clr-namespace:System.Windows;assembly=PresentationFramework"
+```
+
+Then use `x:Static`:
+
+```xml
+<ThemeToggle:ThemeToggleControl
+    CurrentTheme="{x:Static sw:ThemeMode.Dark}"
+    ThemeChanged="ThemeToggle_ThemeChanged" />
+```
+
+### Option 2: `CurrentThemeStr` with a string
+
+```xml
+<ThemeToggle:ThemeToggleControl
+    CurrentThemeStr="DarkMode"
+    ThemeChanged="ThemeToggle_ThemeChanged" />
+```
+
+Accepted string values include `Light`, `Dark`, `System`, and forms like `DarkMode`.
+
 Handle theme changes (optional):
 
 ```csharp
@@ -58,7 +86,7 @@ ThemeToggle.ThemeChangeApplyAction = newTheme =>
 };
 ```
 
-Because WPF theme mode support is still experimental in `.NET 10`, your project may need:
+Because WPF theme mode control support is still experimental in `.NET 9/10`, your project may need:
 
 ```xml
 <NoWarn>$(NoWarn);WPF0001</NoWarn>

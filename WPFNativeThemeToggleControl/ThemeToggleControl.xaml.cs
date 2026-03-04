@@ -34,6 +34,12 @@ namespace WPFNativeThemeToggleControl {
 			typeof(ThemeToggleControl),
 			new PropertyMetadata(true, OnTriModeChanged));
 
+		public static readonly DependencyProperty CurrentThemeStrProperty = DependencyProperty.Register(
+			nameof(CurrentThemeStr),
+			typeof(string),
+			typeof(ThemeToggleControl),
+			new FrameworkPropertyMetadata("System", OnCurrentThemeStrChanged));
+
 		public static readonly RoutedEvent ThemeChangedEvent = EventManager.RegisterRoutedEvent(
 			nameof(ThemeChanged),
 			RoutingStrategy.Bubble,
@@ -48,6 +54,11 @@ namespace WPFNativeThemeToggleControl {
 		public bool TriMode {
 			get => (bool)GetValue(TriModeProperty);
 			set => SetValue(TriModeProperty, value);
+		}
+
+		public string CurrentThemeStr {
+			get => (string)GetValue(CurrentThemeStrProperty);
+			set => SetValue(CurrentThemeStrProperty, value);
 		}
 
 		public event EventHandler<ThemeChangedEventArgs> ThemeChanged {
@@ -79,10 +90,25 @@ namespace WPFNativeThemeToggleControl {
 			var newTheme = (ThemeMode)e.NewValue;
 				
 			control.ThemeChangeApplyAction(newTheme);
+			control.SynchronizeCurrentThemeStr(newTheme);
 
 			control.UpdateIcon();
 			control.UpdateToolTip();
 			control.RaiseEvent(new ThemeChangedEventArgs(ThemeChangedEvent, oldTheme, newTheme));
+		}
+
+		private static void OnCurrentThemeStrChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+			var control = (ThemeToggleControl)d;
+			if (e.NewValue is not string rawTheme)
+				return;
+
+			if (!TryParseThemeMode(rawTheme, out var parsedTheme))
+				return;
+
+         if (control.CurrentTheme == parsedTheme)
+				return;
+
+			control.CurrentTheme = parsedTheme;
 		}
 
 		private static void OnTriModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
@@ -152,6 +178,48 @@ namespace WPFNativeThemeToggleControl {
 		private static bool GetSystemThemeIsLight() {
 			return CachedSystemThemeIsLight;
 		}
+
+		private void SynchronizeCurrentThemeStr(ThemeMode themeMode) {
+			string themeText = GetThemeModeString(themeMode);
+			if (string.Equals(CurrentThemeStr, themeText, StringComparison.OrdinalIgnoreCase))
+				return;
+
+         CurrentThemeStr = themeText;
+		}
+
+		private static bool TryParseThemeMode(string value, out ThemeMode themeMode) {
+			themeMode = ThemeMode.System;
+			if (string.IsNullOrWhiteSpace(value))
+				return false;
+
+			string normalized = value.Trim().Replace("_", string.Empty, StringComparison.Ordinal).Replace("-", string.Empty, StringComparison.Ordinal).Replace(" ", string.Empty, StringComparison.Ordinal);
+			if (normalized.EndsWith("Mode", StringComparison.OrdinalIgnoreCase))
+				normalized = normalized[..^4];
+
+			if (normalized.Equals("Light", StringComparison.OrdinalIgnoreCase)) {
+				themeMode = ThemeMode.Light;
+				return true;
+			}
+
+			if (normalized.Equals("Dark", StringComparison.OrdinalIgnoreCase)) {
+				themeMode = ThemeMode.Dark;
+				return true;
+			}
+
+			if (normalized.Equals("System", StringComparison.OrdinalIgnoreCase)) {
+				themeMode = ThemeMode.System;
+				return true;
+			}
+
+			if (normalized.Equals("None", StringComparison.OrdinalIgnoreCase)) {
+				themeMode = ThemeMode.None;
+				return true;
+			}
+
+			return false;
+		}
+
+		private static string GetThemeModeString(ThemeMode themeMode) => themeMode.Value;
 
 		private static bool ReadSystemThemeIsLight() {
 			try {

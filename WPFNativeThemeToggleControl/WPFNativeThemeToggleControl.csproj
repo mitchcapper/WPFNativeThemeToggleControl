@@ -10,6 +10,16 @@
 		<PackageOutputPath>../Publish</PackageOutputPath>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
+<PropertyGroup>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  <!-- Common NuGet package properties -->
+    <Authors Condition="'$(Authors)' == ''">MitchCapper</Authors>
+    <PackageProjectUrl Condition="'$(PackageProjectUrl)' == ''">https://github.com/MitchCapper/WPFNativeThemeToggleControl</PackageProjectUrl>
+    <RepositoryUrl Condition="'$(RepositoryUrl)' == ''">https://github.com/MitchCapper/WPFNativeThemeToggleControl</RepositoryUrl>
+ 
+    <Copyright Condition="'$(Copyright)' == ''">Copyright © MitchCapper $([System.DateTime]::Now.Year)</Copyright>
+    <PackageTags Condition="'$(PackageTags)' == ''">Fluent Theme,Dark Mode, wpf</PackageTags>
+  </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\README.md" Pack="true" PackagePath="\" Link="README.md" />

@@ -6,6 +6,7 @@
 Native-feeling WPF theme toggle button for `.NET 10` apps. It supports `Light`, `Dark`, and optional `System` mode, and updates `Application.Current.ThemeMode` when toggled.  Best used with themes like the [WPF 9+ built in fluent theme](https://learn.microsoft.com/en-us/dotnet/desktop/wpf/whats-new/net90#fluent-theme).
 
 ## Features
+![Tri Icon Mode Light/System/Dark](Icons.png)
 
 - Small icon-only `ThemeToggleControl`
 - `TriMode` support (`System -> Dark -> Light` cycle)
